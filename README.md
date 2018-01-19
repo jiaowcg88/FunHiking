@@ -4,7 +4,7 @@ FunHiking Website created by Jiao Wu, written in javascript with Express Node.js
 
 Here is the website link: https://dry-coast-39587.herokuapp.com/
 
-#YelpCamp
+#FunHiking
 
 ##Initial Setup
 
