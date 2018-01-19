@@ -1,0 +1,21 @@
+<% include ./partials/header %>
+ <div class="container" id="signup_container">
+    <div class="main" id="signup_main">
+      <h3 id="signup_h2">Create Your Account</h3>
+      <form action="/register" method="post">
+        <div class="form-group">
+          <label>User Name:</label>
+          <input class="form-control" type="text" name="username" placeholder="username">
+        </div>
+        <div class="form-group">
+          <label>Password:</label>
+          <input class="form-control" type="password" name="password" placeholder="password">
+        </div>
+         <div class="form-group">
+          <button class="btn btn-lg btn-primary btn-block">Sign Up</button>
+        </div>
+      </form>
+        <a href="/campgrounds"> Go Back</a>
+        </div>
+</div>
+<% include ./partials/footer %>

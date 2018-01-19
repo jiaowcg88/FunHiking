@@ -1,0 +1,29 @@
+<% include ../partials/header %>
+
+  <div class="container">
+      <header class="jumbotron">
+        <div>
+            <h1><span class="glyphion glyphicon-tent">Welcome to GoHikings</span></h1>
+            <p>View our amazing hiking places from all over the world</p>
+            <p>
+               <a class="btn btn-primary btn-lg" href="/campgrounds/new">Add New Hiking Place</a>
+            </p> 
+        </div>
+      </header>
+      <div class="row text-center flex-wrap" id="hiking-grid">
+          <% campgrounds.forEach(function(campground){   %>
+               <div class="col-md-3 col-sm-6">
+                   <div class="thumbnail" >
+                      <img  src="<%= campground.image %>" style="width: 100%; height:175px">
+                   <div class="caption" style="margin:0; padding:0px;">
+                     <h4> <%= campground.name %></h4>
+                   </div>  
+                     <p>
+                       <a href="/campgrounds/<%=campground._id %>" class="btn btn-primary">More Info</a>
+                     </p>
+                   </div>
+               </div>
+          <% });%>
+      </div>
+  </div>
+<% include ../partials/footer %>

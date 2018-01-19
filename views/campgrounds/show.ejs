@@ -1,0 +1,122 @@
+<% include ../partials/header %>
+<div class="container">
+    <div class ="row">
+      <div class ="col-md-3">
+          <p class="lead" >Hiking</p>
+            <div class="list-group" > 
+             <a href="#" class="list-group-item active"> Related Hikings</a>
+             <a href="#" class="list-group-item">Created a group</a>
+             <a href="#" class="list-group-item">Upload images</a>
+            </div>
+            <div id="map"> </div>
+      </div>
+      <div class="col-md-9">
+          <div class="thumbnail" style="padding:0;">
+            <img class ="img-responsive" src="<%=campground.image%>">
+            <div class="caption">
+              <h4 class="pull-right">Budget: $<%=campground.price%></h4>       
+              <h4 ><a href="<%=campground.image%>"> <%=campground.name %></a></h4>
+              <p><%=campground.description %></p>
+              <p>
+                <em>Submitted By <%= campground.author.username%>,at <%= moment(campground.createdAt, "MM-DD-YYYY") %></em>
+              </p>
+                  <% if (currentUser && campground.author.id.equals(currentUser._id)){ %>
+                     <a class="btn btn-xs btn-warning" href="/campgrounds/<%=campground._id%>/edit" >Edit</a>
+                    <form class="delete-form" action="/campgrounds/<%= campground._id%>?_method=DELETE" method= "POST" >
+                        <button class="btn btn-xs btn-danger">Delete!</button>
+                    </form>
+                 <% } %>
+            </div>
+          </div>
+         <div class="well">
+                 <% if (campground.comments.length >= 1) {  %>
+                 <strong style="font-size: 16px"> Average:  <span class="stars" data-rating="<%=campground.rating%>" data-num-stars="5"></span> 
+                   <%=campground.rating%>/5.00</strong>  
+                <%}   %>
+  
+           <div class="text-right">
+                <a class ="btn btn-success"  href= "/campgrounds/<%=campground._id %>/comments/new"> Add a new Comment </a>
+           </div>   
+           <hr>
+            <% campground.comments.forEach(function(comment){  %>
+                <div class="row">
+                    <div class="col-md-12">
+                          <div class="pull-right">
+                           <% for (var i = 0; i< comment.rating; i++) { %>
+                                <span class="glyphicon glyphicon-star" style=" color:#FFD700;" aria-hidden="true"></span>
+                          <% } %>
+                         </div>
+                         <div>
+                            <strong ><%= comment.author.username %> </strong>
+                           <p>
+                             <em class="pull-right"><%= moment(comment.createdAt).fromNow() %></em>
+                           </p>
+                         </div>
+                  </hr>
+                           <p>
+                              <%=comment.text%>
+                          </p>
+                           <% if (currentUser && comment.author.id.equals(currentUser._id)){ %>
+                                 <a class="btn btn-xs btn-warning" 
+                                    href="/campgrounds/<%=campground._id %>/comments/<%= comment._id %>/edit">
+                                 Edit</a>
+                                 <form class ="delete-form" action="/campgrounds/<%=campground._id %>/comments/<%= comment._id %>?_method=DELETE" method="POST">
+                                   <input type ="submit" class="btn btn-xs btn-danger" value="Delete" >
+                                 </form>
+                          <% } %>    
+                          <hr>
+                    </div> 
+                </div>
+          <%}) %>
+        </div>
+       
+    <script>
+          $.fn.stars = function() {
+              return $(this).each(function() {
+                  var rating = $(this).data("rating");
+                  var numStars = $(this).data("numStars");
+                  var fullStar = new Array(Math.floor(rating + 1)).join('<i class="fa fa-star"></i>');
+                  var halfStar = ((rating%1) !== 0) ? '<i class="fa fa-star-half-empty"></i>': '';
+                  var noStar = new Array(Math.floor(numStars + 1 - rating)).join('<i class="fa fa-star-o"></i>');
+                  $(this).html(fullStar + halfStar + noStar);
+              });
+          }
+          $('.stars').stars();
+        </script>
+   </div>
+ 
+  <script>
+    function initMap() {
+      var lat = <%= campground.lat %>;
+      var lng = <%= campground.lng %>;
+      var center = {lat: lat, lng: lng};
+      var map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 8,
+        center: center,
+        scrollwheel: false
+    });
+    var contentString = `
+      <strong><%= campground.name %><br />
+      <%= campground.location %></strong>
+      <p><%= campground.description %></p>
+    `
+    var infowindow = new google.maps.InfoWindow({
+      content: contentString
+    });
+    var marker = new google.maps.Marker({
+        position: center,
+        map: map
+    });
+    marker.addListener('click', function() {
+      infowindow.open(map, marker);
+    });
+  }
+
+</script>
+ <script async defer
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDP4p4WerW3FSRJ9E6VF9sECBL979fJwBI&callback=initMap">
+</script>
+
+</div>
+
+<% include ../partials/footer  %> 
